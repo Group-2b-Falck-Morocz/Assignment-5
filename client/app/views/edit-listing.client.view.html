@@ -1,1 +1,19 @@
 <!-- Fill in this file to create a UI view for editing listing entries. -->
+<div class="row" ng-controller="ListingsController" ng-init="findOne()">
+  <div class="col-md-offset-1 col-md-10">
+    <div ng-show="error" class="text-danger">
+      <strong ng-bind="error"></strong>
+    </div>
+    <div class="jumbotron">
+      <img id="loader" ng-show="loading" src="/../../img/484.gif">
+      <div ng-show="listing">
+        <p>Name: <input class="full-width" ng-model="listing.name"></input></p>
+        <p>Building Code: <input class="full-width" ng-model="listing.code"></input></p>
+        <p>Address: <input class="full-width" ng-model="listing.address"></input></p>
+      </div>
+      <div>
+      	<button ng-click="update()" type="button" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

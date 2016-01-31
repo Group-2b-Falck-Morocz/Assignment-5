@@ -12,6 +12,10 @@ nav {
   overflow: auto;
 }
 
+.full-width {
+  min-width: 100%;
+}
+
 #loader {
   display: block;
   margin-left: auto;

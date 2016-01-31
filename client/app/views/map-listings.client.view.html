@@ -8,3 +8,12 @@
     https://angular-ui.github.io/angular-google-maps/#!/api/markers
     https://angular-ui.github.io/angular-google-maps/#!/api/windows
   -->
+
+<div id="map_canvas" ng-controller="ListingsController" ng-init="getCoordinates()">
+	<ui-gmap-google-map center="map.center" zoom="map.zoom" options="options">
+	    <ui-gmap-markers models="randomMarkers" coords="'self'" icon="'icon'">
+		</ui-gmap-markers>
+	</ui-gmap-google-map>
+</div>
+
+
