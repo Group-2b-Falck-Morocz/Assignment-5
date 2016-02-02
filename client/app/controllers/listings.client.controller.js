@@ -94,82 +94,50 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
       zoom: 14
     }
 
+    var createRandomMarker = function(i, bounds, idKey) {
+      var listing = $scope.listings[i];
+      if (idKey == null) {
+        idKey = "id";
+      }
+      var latitude = listing.coordinates.latitude;
+      var longitude = listing.coordinates.longitude;
+      var ret = {
+        latitude: latitude,
+        longitude: longitude,
+        title: ' Building: ' + listing.name + ' || Code: ' + listing.code + ' || Address: ' + listing.address
+      };
+      ret[idKey] = i;
+      return ret;
+    };
+
+    $scope.randomMarkers = [];
+
+    $scope.onClick = function(marker, eventName, model) {
+      console.log("Clicked!");
+      model.show = !model.show;
+      console.log(model);
+    };
+
+    // Get the bounds from the map once it's loaded
     $scope.$watch(function() {
       return $scope.map.bounds;
-    }, function(nv, ov) {
-      // Only need to regenerate once
-      if (!ov.southwest && nv.southwest) {
+    }, function() {
+      Listings.getAll().then(function(response) {
+        // Only need to regenerate once
+        $scope.listings = response.data;
         var markers = [];
-        for (var i = 0; i < 50; i++) {
-          markers.push($scope.listingMarkers[i]);
+        for (var i = 0; i < $scope.listings.length; i++) {
+          if ($scope.listings[i].coordinates !== undefined && $scope.listings[i].coordinates !== null) {
+            markers.push(createRandomMarker(i, $scope.map.bounds))
+          } else {
+            console.log('No coordinates for ' + $scope.listings[i].name);
+          }
         }
         $scope.randomMarkers = markers;
-      }
+      }, function(err) {
+        if (err) console.log(err);
+      });
     }, true);
-
-    // $scope.getCoordinates = function() {
-    //   Listings.getAll().then(function(response) {
-    //     $scope.listings = response.data;
-    //     var markers = [];
-    //     console.log('Listings: ' + JSON.stringify($scope.listings) );
-    //     for (var i in $scope.listings) {
-    //       var tempListing = $scope.listings[i];
-    //       console.log('Lat: ' + tempListing.coordinates.latitude + '\tLong: ' + tempListing.coordinates.longitude + '\n');
-    //       if (tempListing.coordinates !== undefined && tempListing.coordinates !== null) {
-    //         console.log('Lat: ' + tempListing.coordinates.latitude + '\tLong: ' + tempListing.coordinates.longitude + '\n');
-    //         var coords = {
-    //           latitude: tempListing.coordinates.latitude,
-    //           longitude: tempListing.coordinates.longitude,
-    //           title: tempListing.name
-    //         };
-    //         coords[idKey] = i;
-    //         markers.push(coords);
-    //       }
-    //     }
-    //     $scope.listingMarkers = markers;
-    //   }, function(error) {
-    //     $scope.loading = false;
-    //     $scope.error = 'Unable to retrieve listings!\n' + error;
-    //   });
-
-    //   };
-
-      var createRandomMarker = function(i, bounds, idKey) {
-        var lat_min = bounds.southwest.latitude,
-          lat_range = bounds.northeast.latitude - lat_min,
-          lng_min = bounds.southwest.longitude,
-          lng_range = bounds.northeast.longitude - lng_min;
-
-        if (idKey == null) {
-          idKey = "id";
-        }
-
-        var myListing = $scope.listings[i];
-        var latitude = lat_min + (Math.random() * lat_range);
-        var longitude = lng_min + (Math.random() * lng_range);
-        var ret = {
-          latitude: latitude,
-          longitude: longitude,
-          title: 'm' + i
-        };
-        ret[idKey] = i;
-        return ret;
-      };
-      $scope.randomMarkers = [];
-      // Get the bounds from the map once it's loaded
-      $scope.$watch(function() {
-        return $scope.map.bounds;
-      }, function(nv, ov) {
-        // Only need to regenerate once
-        if (!ov.southwest && nv.southwest) {
-          var markers = [];
-          for (var i = 0; i < 50; i++) {
-            markers.push(createRandomMarker(i, $scope.map.bounds))
-          }
-          $scope.randomMarkers = markers;
-        }
-      }, true);
-    });
   }
 
 

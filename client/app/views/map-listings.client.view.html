@@ -9,9 +9,15 @@
     https://angular-ui.github.io/angular-google-maps/#!/api/windows
   -->
 
-<div id="map_canvas" ng-controller="ListingsController" ng-init="getCoordinates()">
+<div id="map_canvas" ng-controller="ListingsController">
 	<ui-gmap-google-map center="map.center" zoom="map.zoom" options="options">
 	    <ui-gmap-markers models="randomMarkers" coords="'self'" icon="'icon'">
+        <ui-gmap-windows show="show">
+            <div ng-non-bindable>{{title}}</div>
+            <div ng-non-bindable>{{name}}</div>
+            <div ng-non-bindable>{{code}}</div>
+            <div ng-non-bindable>{{address}}</div>
+        </ui-gmap-windows>
 		</ui-gmap-markers>
 	</ui-gmap-google-map>
 </div>

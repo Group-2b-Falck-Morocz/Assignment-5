@@ -1,4 +1,4 @@
-var config = require('../config/config'), 
+var config = require('../config/config.js'), 
     request = require('request');
 
 module.exports = function(req, res, next) {
@@ -13,10 +13,12 @@ module.exports = function(req, res, next) {
       }, function(error, response, body) {
         if(error) {
           res.status(400).send(err);
-        } 
+        }
+
+        console.log(JSON.parse(body)); 
 
         var data = JSON.parse(body);
-        req.results = data.results[0].geometry.location;
+        req.results = data.results[0].geometry.location || {};
         next();
     });
   } else {

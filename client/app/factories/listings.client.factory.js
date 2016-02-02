@@ -1,6 +1,6 @@
 angular.module('listings').factory('Listings', ['$http', 
   function($http) {
-    var portNumber = '9002';
+    var portNumber = '8080';
     var methods = {
       getAll: function() {
         return $http.get('http://localhost:' + portNumber + '/api/listings');
